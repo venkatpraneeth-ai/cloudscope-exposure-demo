@@ -1,10 +1,32 @@
 steps:
+  # Package the application.
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
       - '.'
+
+  # Upload the image before deploying it.
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
+
+  # Run that exact image on Cloud Run.
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'quickbite'
+      - '--project=$PROJECT_ID'
+      - '--region=us-central1'
+      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
+      - '--service-account=quickbite-runtime@$PROJECT_ID.iam.gserviceaccount.com'
+      - '--port=8080'
+      - '--no-allow-unauthenticated'
+      - '--quiet'
 
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
