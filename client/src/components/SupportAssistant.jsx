@@ -85,7 +85,7 @@ export default function SupportAssistant({ activeOrder, allOrders }) {
       
       const assistantMsg = {
         role: "assistant",
-        content: data.reply,
+        content: data.response,
         workflowActivity: data.workflowActivity || [
           { step: 1, title: "Receive question", description: "Parsed customer query." },
           { step: 2, title: "Look up order/policy", description: "Retrieved kitchen guidelines and order state." },
