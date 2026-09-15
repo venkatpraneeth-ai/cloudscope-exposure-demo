@@ -51,7 +51,7 @@ export default function AdminPortal({
         setLoggedIn(true);
         loadPolicies();
       } else {
-        setError("Invalid admin password. Default credential is 'admin123'.");
+        setError("Invalid admin password.");
       }
     } catch {
       setError("Failed to connect to authentication endpoint.");
@@ -183,7 +183,7 @@ export default function AdminPortal({
               <input
                 id="admin-password-input"
                 type="password"
-                placeholder="Enter password (hint: admin123)"
+                placeholder="Enter administrator password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-stone-950 border border-stone-800 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-500 placeholder:text-stone-500"
@@ -201,7 +201,6 @@ export default function AdminPortal({
           </form>
 
           <div className="pt-2 text-center text-[11px] text-stone-500">
-            Default credentials: <code className="bg-stone-950 px-2 py-0.5 rounded text-orange-400 font-mono border border-stone-800">admin123</code>
           </div>
         </div>
       </div>
