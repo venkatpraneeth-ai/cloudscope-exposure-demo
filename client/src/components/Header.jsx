@@ -63,7 +63,7 @@ export default function Header({
                   Prime
                 </span>
               </div>
-              <p className="text-xs text-stone-400 font-medium">Artisan Cuisines Delivered</p>
+              <p className="text-xs text-stone-400 font-medium">Fresh Food, Delivered Fast</p>
             </div>
           </button>
 
