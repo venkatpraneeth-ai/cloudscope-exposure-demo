@@ -1,107 +1,236 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import Header from "./components/Header";
+import RestaurantDiscovery from "./components/RestaurantDiscovery";
+import RestaurantMenuModal from "./components/RestaurantMenuModal";
+import ItemCustomizeModal from "./components/ItemCustomizeModal";
+import CartDrawer from "./components/CartDrawer";
+import CheckoutModal from "./components/CheckoutModal";
+import OrderTracking from "./components/OrderTracking";
+import SupportAssistant from "./components/SupportAssistant";
+import AdminPortal from "./components/AdminPortal";
+import { Sparkles, Utensils, CheckCircle2, ShieldCheck, Heart } from "lucide-react";
 
 function App() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentView, setCurrentView] = useState("discovery"); // "discovery" | "tracking" | "support"
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const askQuestion = async (text) => {
-    const query = text || input;
-    if (!query) return;
+  // Data states
+  const [restaurants, setRestaurants] = useState([]);
+  const [demoOrders, setDemoOrders] = useState([]);
+  const [activeOrder, setActiveOrder] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
-    setMessages([...messages, { role: 'user', content: query }]);
-    setInput("");
-    
-    // Workflow Visualization Steps
-    setCurrentStep(1); // Receive
-    setTimeout(() => setCurrentStep(2), 600); // Search
-    setTimeout(() => setCurrentStep(3), 1200); // Generate
+  // Modals & Drawers
+  const [selectedRestaurantForMenu, setSelectedRestaurantForMenu] = useState(null);
+  const [itemToCustomize, setItemToCustomize] = useState(null);
+  const [customizingRestaurant, setCustomizingRestaurant] = useState(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: query })
-    });
-    const data = await res.json();
-    
-    setCurrentStep(4); // Respond
-    setMessages(prev => [...prev, { role: 'assistant', content: data.answer }]);
+  // Load initial data
+  const loadRestaurants = async () => {
+    try {
+      const res = await fetch("/api/restaurants");
+      const data = await res.json();
+      setRestaurants(data);
+      // If a restaurant modal is currently open, keep its state synced
+      if (selectedRestaurantForMenu) {
+        const updated = data.find((r) => r.id === selectedRestaurantForMenu.id);
+        if (updated) setSelectedRestaurantForMenu(updated);
+      }
+    } catch (err) {
+      console.error("Failed to load restaurants", err);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans p-8">
-      <header className="flex justify-between items-center mb-12 border-b border-slate-800 pb-4">
-        <h1 className="text-3xl font-bold tracking-tight text-blue-400">CLOUDSCOPE <span className="text-white">SUPPORT</span></h1>
-        <button onClick={() => setIsAdmin(!isAdmin)} className="text-slate-400 hover:text-white transition">
-          {isAdmin ? "Back to Chat" : "Admin Login"}
-        </button>
-      </header>
+  const loadOrders = async () => {
+    try {
+      const res = await fetch("/api/orders");
+      const data = await res.json();
+      setDemoOrders(data);
+      if (data.length > 0 && !activeOrder) {
+        setActiveOrder(data[0]);
+      }
+    } catch (err) {
+      console.error("Failed to load orders", err);
+    }
+  };
 
-      {!isAdmin ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Chat Panel */}
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col h-[600px]">
-            <div className="p-6 flex-1 overflow-y-auto space-y-4">
-              {messages.map((m, i) => (
-                <div key={i} className={`p-4 rounded-lg max-w-[80%] ${m.role === 'user' ? 'bg-blue-600 ml-auto' : 'bg-slate-800'}`}>
-                  {m.content}
-                </div>
-              ))}
-            </div>
-            <div className="p-6 border-t border-slate-800 bg-slate-900/50">
-              <div className="flex gap-2">
-                <input 
-                  className="bg-slate-800 border-none rounded-lg flex-1 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="Ask about shipping, returns..."
-                  value={input} onChange={(e) => setInput(e.target.value)}
-                />
-                <button onClick={() => askQuestion()} className="bg-blue-600 px-6 py-3 rounded-lg font-bold">Send</button>
-              </div>
-            </div>
+  useEffect(() => {
+    loadRestaurants();
+    loadOrders();
+  }, []);
+
+  // Cart operations
+  const handleAddToCart = (newItemConfig) => {
+    setCartItems((prev) => [...prev, newItemConfig]);
+    setIsCartOpen(true);
+  };
+
+  const handleUpdateQuantity = (index, newQty) => {
+    if (newQty <= 0) {
+      handleRemoveItem(index);
+      return;
+    }
+    setCartItems((prev) =>
+      prev.map((item, idx) =>
+        idx === index ? { ...item, quantity: newQty } : item
+      )
+    );
+  };
+
+  const handleRemoveItem = (index) => {
+    setCartItems((prev) => prev.filter((_, idx) => idx !== index));
+  };
+
+  // Order status update
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const res = await fetch(`/api/orders/${orderId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setActiveOrder(updated);
+        setDemoOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? updated : o))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to update status", err);
+    }
+  };
+
+  const handleOrderPlaced = (newOrder) => {
+    setDemoOrders((prev) => [newOrder, ...prev]);
+    setActiveOrder(newOrder);
+    setCartItems([]);
+    setCurrentView("tracking");
+  };
+
+  const handleOpenSupportWithOrder = (order) => {
+    setActiveOrder(order);
+    setCurrentView("support");
+  };
+
+  const totalCartCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
+
+  return (
+    <div className="min-h-screen bg-black text-stone-100 font-sans flex flex-col selection:bg-orange-600 selection:text-white">
+      {/* Top Header Navigation */}
+      <Header
+        currentView={currentView}
+        setCurrentView={setCurrentView}
+        cartCount={totalCartCount}
+        setIsCartOpen={setIsCartOpen}
+        activeOrder={activeOrder}
+        isAdmin={isAdmin}
+        setIsAdmin={setIsAdmin}
+      />
+
+      {/* Main Body Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {isAdmin ? (
+          <AdminPortal
+            restaurants={restaurants}
+            onRefreshRestaurants={loadRestaurants}
+            demoOrders={demoOrders}
+            onRefreshOrders={loadOrders}
+          />
+        ) : (
+          <>
+            {currentView === "discovery" && (
+              <RestaurantDiscovery
+                restaurants={restaurants}
+                onSelectRestaurant={(rest) => setSelectedRestaurantForMenu(rest)}
+                onQuickCustomize={(item, rest) => {
+                  setItemToCustomize(item);
+                  setCustomizingRestaurant(rest);
+                }}
+              />
+            )}
+
+            {currentView === "tracking" && (
+              <OrderTracking
+                order={activeOrder}
+                onUpdateOrderStatus={handleUpdateOrderStatus}
+                onOpenSupportWithOrder={handleOpenSupportWithOrder}
+                onExploreMore={() => setCurrentView("discovery")}
+              />
+            )}
+
+            {currentView === "support" && (
+              <SupportAssistant
+                activeOrder={activeOrder}
+                allOrders={demoOrders}
+              />
+            )}
+          </>
+        )}
+      </main>
+
+      {/* Modals & Slide-overs */}
+      {selectedRestaurantForMenu && (
+        <RestaurantMenuModal
+          restaurant={selectedRestaurantForMenu}
+          onClose={() => setSelectedRestaurantForMenu(null)}
+          onCustomizeItem={(item, rest) => {
+            setItemToCustomize(item);
+            setCustomizingRestaurant(rest);
+          }}
+        />
+      )}
+
+      {itemToCustomize && customizingRestaurant && (
+        <ItemCustomizeModal
+          item={itemToCustomize}
+          restaurant={customizingRestaurant}
+          onClose={() => {
+            setItemToCustomize(null);
+            setCustomizingRestaurant(null);
+          }}
+          onAddToCart={handleAddToCart}
+        />
+      )}
+
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+        onOpenCheckout={() => setIsCheckoutOpen(true)}
+      />
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        cartItems={cartItems}
+        onOrderPlaced={handleOrderPlaced}
+      />
+
+      {/* Footer */}
+      <footer className="border-t border-stone-800 bg-stone-950 py-8 mt-16 text-xs text-stone-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-white tracking-tight text-sm">
+              Quick<span className="text-orange-500">bite</span>
+            </span>
+            <span className="text-stone-400">• Authentic Indian Dum Biryanis, Middle Eastern & Continental Grills</span>
           </div>
 
-          {/* Workflow Panel */}
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold mb-4 text-slate-400">AI Reasoning Path</h2>
-            {[
-              { id: 1, label: "Receive Question", desc: "Input captured and sanitized." },
-              { id: 2, label: "Search Articles", desc: "Querying local support database." },
-              { id: 3, label: "Generate Answer", desc: "Gemini AI synthesizing response." },
-              { id: 4, label: "Respond", desc: "Final answer sent to customer." }
-            ].map((step) => (
-              <div key={step.id} className={`p-6 rounded-xl border-2 transition-all duration-500 ${
-                currentStep === step.id ? 'border-blue-500 bg-blue-500/10 scale-105' : 'border-slate-800 bg-slate-900'
-              }`}>
-                <div className="flex items-center gap-4">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                    currentStep >= step.id ? 'bg-blue-500' : 'bg-slate-800'
-                  }`}>{step.id}</div>
-                  <div>
-                    <div className="font-bold">{step.label}</div>
-                    <div className="text-sm text-slate-400">{step.desc}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="flex items-center gap-4 text-stone-500">
+            <span>Fresh Kitchens Online</span>
+            <span>•</span>
+            <span>Powered by Gemini 3.6 Flash</span>
           </div>
         </div>
-      ) : (
-        <AdminPortal />
-      )}
-    </div>
-  );
-}
-
-function AdminPortal() {
-  return (
-    <div className="max-w-2xl mx-auto bg-slate-900 p-8 rounded-2xl border border-slate-800">
-      <h2 className="text-2xl font-bold mb-6">Administrator Access</h2>
-      <input type="password" placeholder="Enter Admin Password" title="Hint: admin123"
-        className="w-full bg-slate-800 p-4 rounded-lg mb-4 outline-none focus:ring-2 focus:ring-blue-500" />
-      <button className="w-full bg-blue-600 py-4 rounded-lg font-bold">Login to Cloudscope</button>
+      </footer>
     </div>
   );
 }
 
 export default App;
+

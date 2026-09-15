@@ -1,0 +1,8 @@
+{
+  "name": "Quickbite",
+  "description": "Quickbite artisan food delivery app featuring Hyderabadi Dum Biryani, Continental steaks and grills, live order tracking, and Gemini AI concierge in a dark luxury aesthetic.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
