@@ -551,7 +551,7 @@ Answer the customer directly based on the policies and order status above.`;
     const providedKey = headerKey || bodyKey;
 
     // Verify against contextual secret or admin123
-    if (providedKey === ADMIN_API_KEY || providedKey === "admin123") {
+    if (providedKey === ADMIN_API_KEY || {
       return res.json({
         success: true,
         message: "Authorized as Quickbite Administrator",
