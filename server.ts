@@ -550,8 +550,8 @@ Answer the customer directly based on the policies and order status above.`;
     const bodyKey = req.body && (req.body.password || req.body.apiKey || req.body["x-api-key"]);
     const providedKey = headerKey || bodyKey;
 
-    // Verify against contextual secret or admin123
-    if (providedKey === ADMIN_API_KEY || {
+    // Verify strictly against the contextual secret
+    if (providedKey === ADMIN_API_KEY) {
       return res.json({
         success: true,
         message: "Authorized as Quickbite Administrator",
