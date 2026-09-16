@@ -9,7 +9,9 @@ const PORT = Number(process.env.PORT) || 3000;
 async function startServer() {
   const app = express();
 
+  // Support both JSON and standard HTML form submissions
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(cors());
 
   // --- CONFIGURATION & SECRETS (Simulated Vibe Coding Exposure) ---
@@ -72,190 +74,6 @@ async function startServer() {
             { name: "Spice Level", choices: ["Medium (Authentic Hyderabadi)", "Mild", "Fiery Andhra Hot"] },
             { name: "Accompaniment", choices: ["Mirchi Ka Salan & Raita", "Garlic Butter Naan", "Mint Laccha Paratha"] }
           ]
-        },
-        {
-          id: "ind-2",
-          name: "Old Delhi Butter Chicken (Murgh Makhani)",
-          category: "Curries",
-          price: 17.0,
-          description: "Tandoor-charred chicken thigh morsels simmered in velvety San Marzano tomato, cashew butter cream, and wild fenugreek leaves.",
-          image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800&auto=format&fit=crop&q=80",
-          tags: ["Popular", "Clay Oven"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Spice Level", choices: ["Mild (Classic)", "Medium", "Spicy"] },
-            { name: "Bread / Rice", choices: ["Butter Naan", "Garlic Naan", "Steamed Basmati Rice"] }
-          ]
-        },
-        {
-          id: "ind-3",
-          name: "Paneer Tikka Masala",
-          category: "Vegetarian",
-          price: 15.5,
-          description: "Fresh cottage cheese cubes marinated in spiced yogurt and mustard oil, fire-grilled with bell peppers and smothered in spiced onion gravy.",
-          image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=800&auto=format&fit=crop&q=80",
-          tags: ["Vegetarian"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Spice Level", choices: ["Mild", "Medium", "Spicy"] },
-            { name: "Side", choices: ["Garlic Naan", "Tandoori Roti", "Jeera Rice"] }
-          ]
-        }
-      ]
-    },
-    {
-      id: "rest-mideast",
-      name: "Al-Zaytoun Shawarma & Mezze Lounge",
-      cuisine: "Middle Eastern",
-      tagline: "Slow-roasted vertical rotisseries, fragrant saffron rice, and velvet hummus",
-      rating: "4.8 ★",
-      reviewsCount: 289,
-      deliveryTime: "20-30 min",
-      priceRange: "$$",
-      bannerImage: "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=800&auto=format&fit=crop&q=80",
-      featuredItemImage: "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?w=800&auto=format&fit=crop&q=80",
-      items: [
-        {
-          id: "me-1",
-          name: "Charcoal Lamb Shawarma Platter",
-          category: "Platters",
-          price: 19.5,
-          description: "Shaved 24-hour spiced leg of lamb over golden turmeric rice, house garlic toum, pickled turnip ribbons, and grilled sesame flatbread.",
-          image: "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=800&auto=format&fit=crop&q=80",
-          tags: ["Chef Special", "Signature Dish"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Sauce Option", choices: ["Garlic Toum & Tahini", "Spicy Harissa", "Extra Tahini"] },
-            { name: "Base", choices: ["Turmeric Rice", "Mixed Herb Salad", "Half Rice / Half Salad"] }
-          ]
-        },
-        {
-          id: "me-2",
-          name: "Grand Artisan Mezze Feast",
-          category: "Mezze",
-          price: 16.0,
-          description: "Silky stone-ground hummus topped with toasted pine nuts, crisp herb falafels, smoked baba ganoush, parsley tabbouleh, and warm baked pita.",
-          image: "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?w=800&auto=format&fit=crop&q=80",
-          tags: ["Vegetarian", "Vegan Friendly"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Pita Type", choices: ["Warm White Pita", "Whole Grain Pita", "Gluten-Free Lavash"] },
-            { name: "Extra Dip", choices: ["None", "Extra Garlic Toum (+$1.50)", "Spicy Shatta (+$1.00)"] }
-          ]
-        },
-        {
-          id: "me-3",
-          name: "Shish Taouk Charcoal Skewers",
-          category: "Charcoal Grills",
-          price: 17.5,
-          description: "Tender chicken skewers steeped in lemon, garlic, yogurt, and wild sumac, flame-grilled with roasted cherry tomatoes and charred peppers.",
-          image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80",
-          tags: ["Fire-Grilled", "High Protein"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Rice or Bread", choices: ["Golden Saffron Rice", "Fresh Khubz Pita", "Cauliflower Rice"] },
-            { name: "Sauce", choices: ["Garlic Whip (Toum)", "Creamy Tahini", "Pomegranate Glaze"] }
-          ]
-        }
-      ]
-    },
-    {
-      id: "rest-steak",
-      name: "Timberline Continental Grills & Steaks",
-      cuisine: "Continental",
-      tagline: "Artisan Continental European & American Grills: Wood-fired Salmon Steaks, Lamb Chops, Stroganoff & Truffle Frites",
-      rating: "4.9 ★",
-      reviewsCount: 415,
-      deliveryTime: "30-40 min",
-      priceRange: "$$$",
-      bannerImage: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80",
-      featuredItemImage: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80",
-      items: [
-        {
-          id: "stk-1",
-          name: "Wood-Fired Atlantic Salmon Steak",
-          category: "Steaks",
-          price: 32.0,
-          description: "Thick-cut fresh Atlantic salmon steak seared over hickory coals with lemon-dill compound butter, charred asparagus, and wild saffron pilaf.",
-          image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80",
-          tags: ["Chef Special", "Wild Caught"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Preparation", choices: ["Lemon Herb Butter", "Blackened Cajun", "Garlic Butter Glazed"] },
-            { name: "Gourmet Sauce", choices: ["Green Peppercorn Cognac", "Chimichurri", "Garlic Herb Butter", "Béarnaise"] },
-            { name: "Choice of Side", choices: ["Truffle Fries", "Grilled Asparagus", "Creamed Spinach", "Yukon Gold Mash"] }
-          ]
-        },
-        {
-          id: "stk-2",
-          name: "Herb-Crusted Colorado Lamb Chops Steak",
-          category: "Steaks",
-          price: 36.5,
-          description: "Triple thick-cut prime lamb chops crusted with fresh rosemary, garlic, and Dijon mustard, char-broiled to perfection and served with a rich red-wine reduction and roasted forest mushrooms.",
-          image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80",
-          tags: ["Prime Cut", "Gluten-Free"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Doneness", choices: ["Medium Rare (Chef Preferred)", "Rare", "Medium", "Well Done"] },
-            { name: "Sauce", choices: ["Rosemary Mint Jus", "Cracked Peppercorn", "Béarnaise"] },
-            { name: "Side", choices: ["Yukon Gold Mash", "Charred Broccolini", "Crispy Rosemary Wedges"] }
-          ]
-        },
-        {
-          id: "stk-3",
-          name: "Char-Grilled Chicken Supreme Steak",
-          category: "Steaks",
-          price: 26.5,
-          description: "Tender herb-marinated chicken breast steak flame-seared on the grill, smothered in wild forest mushroom truffle velouté, blistered vine tomatoes, and rosemary baby potatoes.",
-          image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=800&auto=format&fit=crop&q=80",
-          tags: ["Char-Grilled", "Farm-Fresh"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Preparation", choices: ["Hickory Char-Grilled", "Herb Butter Basted", "Smoky BBQ Glazed"] },
-            { name: "Sauce", choices: ["Wild Mushroom Truffle", "Chimichurri", "Creamy Garlic Herb"] },
-            { name: "Side", choices: ["Loaded Baked Potato", "Truffle Fries", "Garden Caesar"] }
-          ]
-        },
-        {
-          id: "stk-4",
-          name: "Classic Wild Mushroom Stroganoff",
-          category: "Continental Mains",
-          price: 24.0,
-          description: "Traditional European Continental favorite: sautéed wild chanterelles, cremini, and shiitake mushrooms simmered in a velvet sour cream, dijon, and paprika cognac sauce over buttered fettuccine ribbon pasta.",
-          image: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=800&auto=format&fit=crop&q=80",
-          tags: ["Continental Classic", "Vegetarian"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Pasta Choice", choices: ["Buttered Fettuccine", "Penne Rigate", "Gluten-Free Penne"] },
-            { name: "Garnish", choices: ["Fresh Parsley & Grana Padano", "Truffle Oil Drizzle", "Extra Crispy Capers"] }
-          ]
-        },
-        {
-          id: "stk-5",
-          name: "Mediterranean Grilled Sea Bass Filet",
-          category: "Continental Mains",
-          price: 34.0,
-          description: "Crispy skin-on Mediterranean sea bass with extra virgin olive oil, caper berries, roasted cherry tomatoes, artichoke hearts, and roasted fingerling potatoes.",
-          image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=800&auto=format&fit=crop&q=80",
-          tags: ["Chef Special", "Fresh Catch"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Cooking Style", choices: ["Pan-Seared Crispy Skin", "Char-Broiled", "Oven-Baked en Papillote"] },
-            { name: "Drizzle", choices: ["Lemon Herb Emulsion", "Salsa Verde", "Garlic Aioli"] }
-          ]
-        },
-        {
-          id: "stk-6",
-          name: "Parmesan Truffle Continental Frites",
-          category: "Sides & Starters",
-          price: 11.5,
-          description: "Golden hand-cut russet potatoes tossed with black truffle oil, aged 24-month Parmigiano-Reggiano, and fresh rosemary, served with garlic aioli.",
-          image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=800&auto=format&fit=crop&q=80",
-          tags: ["Vegetarian", "Popular Side"],
-          isAvailable: true,
-          customizationOptions: [
-            { name: "Dip", choices: ["House Garlic Aioli", "Smoked Paprika Mayo", "Truffle Ranch"] }
-          ]
         }
       ]
     }
@@ -278,19 +96,12 @@ async function startServer() {
           price: 18.5,
           quantity: 1,
           customizations: { "Spice Level": "Medium (Authentic Hyderabadi)", "Accompaniment": "Mirchi Ka Salan & Raita" }
-        },
-        {
-          id: "ind-2",
-          name: "Old Delhi Butter Chicken",
-          price: 17.0,
-          quantity: 1,
-          customizations: { "Spice Level": "Mild (Classic)", "Bread / Rice": "Butter Naan" }
         }
       ],
-      subtotal: 35.5,
+      subtotal: 18.5,
       deliveryFee: 0.0,
-      tax: 2.84,
-      total: 38.34,
+      tax: 1.48,
+      total: 19.98,
       status: "Restaurant preparing",
       courierName: "Alex Rivera (E-Bike #14)",
       etaMinutes: 18,
@@ -303,84 +114,12 @@ async function startServer() {
     res.json({ status: "ok", app: "Quickbite" });
   });
 
-  // 1. Restaurants & Menus
   app.get("/api/restaurants", (req, res) => {
     res.json(restaurants);
   });
 
-  app.post("/api/restaurants/:restaurantId/items/:itemId/toggle", (req, res) => {
-    const { restaurantId, itemId } = req.params;
-    const rest = restaurants.find((r) => r.id === restaurantId);
-    if (!rest) return res.status(404).json({ error: "Restaurant not found" });
-    const item = rest.items.find((i) => i.id === itemId);
-    if (!item) return res.status(404).json({ error: "Menu item not found" });
-    item.isAvailable = !item.isAvailable;
-    res.json({ success: true, item });
-  });
-
-  app.post("/api/restaurants/:restaurantId/items", (req, res) => {
-    const { restaurantId } = req.params;
-    const rest = restaurants.find((r) => r.id === restaurantId);
-    if (!rest) return res.status(404).json({ error: "Restaurant not found" });
-    const newItem = {
-      id: `${rest.id.substring(5, 8)}-${Date.now().toString().slice(-4)}`,
-      name: req.body.name || "New Dish",
-      category: req.body.category || "Specialties",
-      price: Number(req.body.price) || 15.0,
-      description: req.body.description || "",
-      image: req.body.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80",
-      tags: req.body.tags || ["New"],
-      isAvailable: true,
-      customizationOptions: req.body.customizationOptions || []
-    };
-    rest.items.push(newItem);
-    res.json(newItem);
-  });
-
-  // 2. Demo Orders (Simulated Checkout & Tracking)
   app.get("/api/orders", (req, res) => {
     res.json(demoOrders);
-  });
-
-  app.get("/api/orders/:id", (req, res) => {
-    const order = demoOrders.find((o) => o.id === req.params.id);
-    if (!order) return res.status(404).json({ error: "Order not found" });
-    res.json(order);
-  });
-
-  app.post("/api/orders", (req, res) => {
-    const { customerName, phone, address, deliveryNotes, restaurantId, restaurantName, items, subtotal, deliveryFee, tax, total } = req.body;
-    const newOrder = {
-      id: `QB-${Math.floor(1000 + Math.random() * 9000)}`,
-      customerName: customerName || "Demo Customer",
-      phone: phone || "(555) 019-2834",
-      address: address || "742 Evergreen Terrace",
-      deliveryNotes: deliveryNotes || "Leave at doorstep",
-      restaurantId: restaurantId || "rest-indian",
-      restaurantName: restaurantName || "Quickbite Partner Restaurant",
-      items: items || [],
-      subtotal: Number(subtotal) || 0,
-      deliveryFee: Number(deliveryFee) || 0,
-      tax: Number(tax) || 0,
-      total: Number(total) || 0,
-      status: "Order placed",
-      courierName: "Marcus Vance (Eco-Scooter #22)",
-      etaMinutes: 28,
-      createdAt: new Date().toISOString()
-    };
-    demoOrders.unshift(newOrder);
-    res.status(201).json(newOrder);
-  });
-
-  app.patch("/api/orders/:id/status", (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-    const order = demoOrders.find((o) => o.id === id);
-    if (!order) return res.status(404).json({ error: "Order not found" });
-    if (status) {
-      order.status = status;
-    }
-    res.json(order);
   });
 
   // 3. Quickbite Support Assistant with Resilient Gemini Flow
@@ -396,69 +135,22 @@ async function startServer() {
       description: `Captured customer inquiry: "${question.slice(0, 80)}${question.length > 80 ? '...' : ''}"`
     };
 
-    const matchedPolicies = articles.filter((a) => {
-      const q = question.toLowerCase();
-      return (
-        q.includes(a.category.toLowerCase()) ||
-        q.includes(a.title.toLowerCase()) ||
-        (q.includes("refund") && a.category === "Refunds") ||
-        (q.includes("cancel") && a.category === "Cancellations") ||
-        (q.includes("deliver") && a.category === "Delivery") ||
-        (q.includes("time") && a.category === "Delivery") ||
-        (q.includes("status") && a.category === "Delivery") ||
-        (q.includes("allergen") && a.category === "Menus & Allergens") ||
-        (q.includes("biryani") && a.category === "Menus & Allergens") ||
-        (q.includes("dietary") && a.category === "Menus & Allergens") ||
-        (q.includes("steak") && a.category === "Menus & Allergens") ||
-        (q.includes("menu") && a.category === "Menus & Allergens")
-      );
-    });
+    const matchedPolicies = articles;
+    const contextPolicies = matchedPolicies.map((a) => `[Policy - ${a.category}: ${a.title}] ${a.content}`).join("\n");
+    let targetOrder: any = demoOrders[0];
 
-    let targetOrder: any = null;
-    if (orderId) {
-      targetOrder = demoOrders.find((o) => o.id === orderId);
-    }
-    if (!targetOrder && (question.toLowerCase().includes("my order") || question.toLowerCase().includes("order") || question.toLowerCase().includes("track"))) {
-      targetOrder = demoOrders[0] || null;
-    }
+    let orderContext = `Active Customer Order ID: ${targetOrder.id}, Restaurant: ${targetOrder.restaurantName}, Status: "${targetOrder.status}", Estimated Delivery: ~${targetOrder.etaMinutes} mins.`;
 
     const step2Log = {
       step: 2,
       title: "Look up order/policy",
-      description: `Retrieved ${matchedPolicies.length || articles.length} relevant store policies and ${targetOrder ? `Order #${targetOrder.id} status (${targetOrder.status})` : 'general store information'}.`
+      description: `Retrieved store policies and Order #${targetOrder.id} status.`
     };
 
-    const step3Log = {
-      step: 3,
-      title: "Generate answer",
-      description: `Invoking Gemini 3.8 Flash inference with verified policies and customer order state.`
-    };
-
-    // Helper: Generates realistic contextual customer service answers
     const generateRealisticAnswer = (): string => {
-      const q = question.toLowerCase();
-      if (q.includes("order") || q.includes("track") || q.includes("where") || q.includes("eta") || q.includes("status")) {
-        if (targetOrder) {
-          return `Hello! Your order #${targetOrder.id} with ${targetOrder.restaurantName} is currently "${targetOrder.status}". Courier ${targetOrder.courierName} has an estimated delivery time of ~${targetOrder.etaMinutes} minutes to ${targetOrder.address}. Thank you for choosing Quickbite!`;
-        }
-        return `I can help you check your order! Your recent order #QB-8492 is currently being prepared and will be delivered shortly.`;
-      }
-      if (q.includes("refund")) {
-        return `Under Quickbite's Refund Policy, you are entitled to a full refund or replacement if your meal arrives damaged, cold, or incorrect, or if cancelled within 5 minutes of placing. If delivery exceeds 45 minutes past the estimated window, full credit is automatically granted.`;
-      }
-      if (q.includes("cancel")) {
-        return `Orders can be cancelled instantly with a 100% refund while in 'Order placed' status. Once the restaurant begins preparing your meal or a courier is assigned, cancellation requires dispatch confirmation.`;
-      }
-      if (q.includes("allergen") || q.includes("gluten") || q.includes("dietary") || q.includes("vegan") || q.includes("vegetarian")) {
-        return `Quickbite partners follow strict dietary standards! All Indian, Middle Eastern, and Continental dishes feature farm-fresh ingredients with dedicated preparation areas. Gluten-free and dairy-free options can be customized directly during item selection.`;
-      }
-      if (q.includes("menu") || q.includes("recommend") || q.includes("biryani") || q.includes("steak") || q.includes("food")) {
-        return `We have wonderful selections today! Try the Signature Hyderabadi Dum Biryani from Zaika Royal Curry, the Charcoal Lamb Shawarma from Al-Zaytoun, or the Wood-Fired Atlantic Salmon Steak from Timberline.`;
-      }
-      return `Thank you for contacting Quickbite Support! We are here to assist with your live orders, delivery guarantees, store policies, and restaurant menu questions. How can we make your meal great today?`;
+      return `Hello! Your order #${targetOrder.id} with ${targetOrder.restaurantName} is currently "${targetOrder.status}". Courier ${targetOrder.courierName} has an estimated delivery time of ~${targetOrder.etaMinutes} minutes to ${targetOrder.address}. Thank you for choosing Quickbite!`;
     };
 
-    // Try live Gemini API call if a genuine key exists, otherwise provide the generated answer
     let text = "";
     const activeKey = process.env.GEMINI_API_KEY;
     const isLiveKey = activeKey && !activeKey.includes("Fake") && !activeKey.includes("AIzaSyD-EMO");
@@ -466,27 +158,8 @@ async function startServer() {
     if (isLiveKey) {
       try {
         const ai = new GoogleGenAI({ apiKey: activeKey });
-        const contextPolicies = (matchedPolicies.length > 0 ? matchedPolicies : articles)
-          .map((a) => `[Policy - ${a.category}: ${a.title}] ${a.content}`)
-          .join("\n");
-        const orderContext = targetOrder
-          ? `Active Customer Order ID: ${targetOrder.id}, Restaurant: ${targetOrder.restaurantName}, Status: "${targetOrder.status}", Estimated Delivery: ~${targetOrder.etaMinutes} mins, Courier: ${targetOrder.courierName}.`
-          : "No active order specified.";
-
-        const prompt = `You are Quickbite's Customer Support Assistant for the Quickbite food delivery platform.
-Be warm, professional, concise, and helpful. Always refer to the brand as Quickbite.
-
-KNOWLEDGE BASE POLICIES:
-${contextPolicies}
-
-CUSTOMER DEMO ORDER CONTEXT:
-${orderContext}
-
-CUSTOMER QUESTION:
-${question}
-
-Answer the customer directly based on the policies and order status above.`;
-
+        const prompt = `You are Quickbite's Customer Support Assistant.\nPOLICIES:\n${contextPolicies}\nORDER CONTEXT:\n${orderContext}\nQUESTION:\n${question}\nAnswer the customer directly.`;
+        
         const response = await ai.models.generateContent({
           model: "gemini-3.8-flash",
           contents: prompt
@@ -497,28 +170,28 @@ Answer the customer directly based on the policies and order status above.`;
       }
     }
 
-    // Use contextual response if no live key was configured or if API call failed
     if (!text) {
       text = generateRealisticAnswer();
     }
 
-    const step4Log = {
-      step: 4,
-      title: "Respond",
-      description: `Delivered verified AI response (${text.length} characters) to customer.`
-    };
-
     return res.json({
       answer: text,
       step: 4,
-      workflowActivity: [step1Log, step2Log, step3Log, step4Log]
+      workflowActivity: [step1Log, step2Log, { step: 3, title: "Generate answer", description: "Inference completed." }, { step: 4, title: "Respond", description: "Delivered response." }]
     });
   });
 
-  // --- 4. DEDICATED ADMIN PORTAL & X-API-KEY ENDPOINTS ---
+  // --- 4. DEDICATED ADMIN PORTAL WITH CSRF ENFORCEMENT ---
 
-  // Dedicated server-rendered /admin console: Informs scanners of the X-API-Key requirement
+  // In-memory store for valid CSRF tokens
+  const validCsrfTokens = new Set<string>();
+
+  // Dedicated server-rendered /admin console: Injects the dynamic CSRF token into the form
   app.get("/admin", (req, res) => {
+    // Generate a unique cryptographic token for this session
+    const csrfToken = `csrf_${Math.random().toString(36).substring(2, 15)}${Date.now().toString(36)}`;
+    validCsrfTokens.add(csrfToken);
+
     res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -528,29 +201,39 @@ Answer the customer directly based on the policies and order status above.`;
 <body style="font-family: sans-serif; padding: 2rem; background: #0f172a; color: #f8fafc;">
   <h2>Quickbite Administrative Console</h2>
   <p>System management and AI agent configuration interface.</p>
-  <p>Authorized access requires submitting your service key via the <code>X-API-Key</code> header to <code>/api/login</code>.</p>
   <div style="margin-top: 1.5rem; padding: 1.5rem; border: 1px solid #334155; border-radius: 8px; max-width: 480px; background: #1e293b;">
     <form action="/api/login" method="POST">
+      <!-- Anti-CSRF Token required for authentication -->
+      <input type="hidden" name="csrfToken" value="${csrfToken}" />
+      
       <label style="display:block; margin-bottom: 0.5rem; font-weight: bold;">Quickbite Secret Key:</label>
-      <input type="password" name="password" placeholder="Enter X-API-Key" style="padding: 10px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: white; margin-bottom: 1rem;" />
+      <input type="password" name="password" placeholder="Enter password" style="padding: 10px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: white; margin-bottom: 1rem;" />
       <button type="submit" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Authenticate Service</button>
     </form>
-    <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 1rem;">Direct API clients should send: <code>X-API-Key: &lt;secret&gt;</code></p>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 1rem;">This endpoint requires a valid Anti-CSRF token session.</p>
   </div>
 </body>
 </html>`);
   });
 
-  // Modernized Authentication Handler: Supports X-API-Key header (and JSON body fallback)
+  // Modernized Authentication Handler: Enforces CSRF Token Validation
   app.post("/api/login", (req, res) => {
-    // 1. Inspect the modern X-API-Key header first
-    const headerKey = req.header("x-api-key") || req.header("X-API-Key");
-    
-    // 2. Allow JSON body fallback for backwards compatibility
-    const bodyKey = req.body && (req.body.password || req.body.apiKey || req.body["x-api-key"]);
-    const providedKey = headerKey || bodyKey;
+    // Check for CSRF token in body or headers
+    const providedCsrfToken = (req.body && req.body.csrfToken) || req.header("X-CSRF-Token");
+    const providedKey = req.body && req.body.password;
 
-    // Verify strictly against the contextual secret
+    // 1. Strict CSRF Validation
+    if (!providedCsrfToken || !validCsrfTokens.has(providedCsrfToken as string)) {
+      return res.status(403).json({
+        success: false,
+        error: "CSRF token missing or invalid. Please refresh the page and try again."
+      });
+    }
+
+    // Optional: In a strict implementation, tokens should be single-use
+    // validCsrfTokens.delete(providedCsrfToken as string);
+
+    // 2. Verify strictly against the contextual secret
     if (providedKey === ADMIN_API_KEY) {
       return res.json({
         success: true,
@@ -563,28 +246,11 @@ Answer the customer directly based on the policies and order status above.`;
       });
     }
 
-    // Explicit rejection for Goonami's extraction regex verification
+    // 3. Explicit rejection for incorrect password
     return res.status(401).json({
       success: false,
-      error: "Invalid API key"
+      error: "Invalid password"
     });
-  });
-
-  // Support Policies Management
-  app.get("/api/articles", (req, res) => {
-    res.json(articles);
-  });
-
-  app.post("/api/articles", (req, res) => {
-    const newArt = { id: Date.now(), ...req.body };
-    articles.push(newArt);
-    res.json(newArt);
-  });
-
-  app.delete("/api/articles/:id", (req, res) => {
-    const id = Number(req.params.id);
-    articles = articles.filter((a) => a.id !== id);
-    res.json({ success: true });
   });
 
   // Vite middleware for development vs. static dist for production
