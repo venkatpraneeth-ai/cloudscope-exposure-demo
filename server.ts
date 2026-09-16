@@ -13,7 +13,7 @@ async function startServer() {
   app.use(cors());
 
   // --- CONFIGURATION & SECRETS (Simulated Vibe Coding Exposure) ---
-  const ADMIN_API_KEY = process.env.ADMIN_API_KEY || process.env.ADMIN_PASSWORD || "quickbite-admin-2026";
+  const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "quickbite-admin-2026";
   // Safe simulated key matching the Google API key prefix for detector validation
   const EXPOSED_GEMINI_KEY = process.env.GEMINI_API_KEY || "AIzaSyFakeKeyForCloudScopeDemo2026XyZ";
 
