@@ -14,6 +14,9 @@ RUN mkdir -p backend \
 
 FROM node:22-bookworm-slim
 
+# Remediate container vulnerabilities (CVE-2026-39821 on go / base packages)
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080

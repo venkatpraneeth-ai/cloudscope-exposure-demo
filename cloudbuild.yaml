@@ -3,6 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '--no-cache'
       - '-t'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
       - '.'
@@ -25,6 +26,8 @@ steps:
       - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloudscope/quickbite:$BUILD_ID'
       - '--service-account=quickbite-runtime@$PROJECT_ID.iam.gserviceaccount.com'
       - '--port=8080'
+      - '--ingress=internal-and-cloud-load-balancing'
+      - '--set-secrets=GEMINI_API_KEY=gemini-api-key:latest'
       - '--no-allow-unauthenticated'
       - '--quiet'
 
